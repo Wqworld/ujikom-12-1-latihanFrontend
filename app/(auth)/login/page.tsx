@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import api from "@/lib/axios";
 import { AxiosError } from "axios";
 import Image from "next/image";
@@ -18,6 +19,19 @@ export default function LoginPage() {
     e.preventDefault();
     setLoading(true);
     setError("");
+    if (!username || !password) {
+      setError("Username dan password harus diisi");
+      setLoading(false);
+      return;
+    }else if (!username) {
+      setError("Username harus diisi");
+      setLoading(false);
+      return;
+    }else if (!password) {
+      setError("Password harus diisi");
+      setLoading(false);
+      return;
+    }
 
     try {
       //tembak ke backend
@@ -29,7 +43,7 @@ export default function LoginPage() {
       const { token } = response.data;
       localStorage.setItem("token", token);
 
-      router.push("/dashboard");
+      router.push("/");
       toast.success("Login Berhasil");
     } catch (err) {
       // Kita cek apakah error ini beneran dari Axios?
@@ -37,9 +51,11 @@ export default function LoginPage() {
         // Sekarang TypeScript tahu ini AxiosError, jadi .response boleh diakses
         const msg = err.response?.data?.message;
         setError(msg || "Login Gagal");
+        toast.error(msg || "Login Gagal");
       } else {
         // Kalau error lain (misal codingan error)
         setError("Terjadi kesalahan sistem");
+        toast.error("Terjadi kesalah sistem");
       }
     } finally {
       setLoading(false);
@@ -70,27 +86,28 @@ export default function LoginPage() {
             Login untuk memberikan pelayanan terbaik atau kelola restoran Anda
             dengan data yang akurat.
           </p>
-          {error && (
-            <p className="text-white text-sm bg-red-500/60 rounded-sm p-1">
-              {error}
-            </p>
-          )}
+
           <div className="px-15">
             <div className="w-full h-full mt-5">
               <form onSubmit={handleSubmit} className="space-y-3">
+                
+                <Label className="text-[#68868C]">Username</Label>
                 <Input
                   type="text"
                   name="username"
                   placeholder="Username"
+                  required
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   className="border-[#68868C] border-2 focus:border-[#68868C] focus:ring-[#68868C] text-[#4d4d4d]"
                 />
 
+                <Label className= "text-[#68868C]">Password</Label>
                 <Input
                   type="password"
                   name="password"
                   placeholder="Password"
+                  required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="border-[#68868C] border-2 focus:border-[#68868C] focus:ring-[#68868C]  text-[#4d4d4d]"
