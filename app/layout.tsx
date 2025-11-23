@@ -3,12 +3,11 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 
-
 const poppins = Poppins({
-  weight: ["800" ,"300", "500", "600", "700", "900"],
+  weight: ["800", "300", "500", "600", "700", "900"],
   style: "normal",
-  subsets: ['latin'],
-})
+  subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
   title: "KasirKu App",
@@ -22,10 +21,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${poppins.className}  antialiased`}
-      >
-        <Toaster position="bottom-right" expand={true} />
+      <body className={`${poppins.className}  antialiased`}>
+        <Toaster position="top-center" expand={true} />
+        {/* <SideBar/> */}
         {children}
       </body>
     </html>
